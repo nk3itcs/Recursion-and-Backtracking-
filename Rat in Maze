@@ -1,0 +1,49 @@
+class Solution {
+    public static char move(int d){
+        if(d==0)
+            return 'U';
+        else if(d==1)
+            return 'R';
+        else if(d==2)
+            return 'D';
+        else
+            return 'L';
+    }
+    public static boolean validIndex(int nrow,int ncol,int n){
+        if(nrow>=0 && nrow<n && ncol>=0 && ncol<n)
+            return true;
+        return false;
+    }
+    public static void solve(int n,int [][]m,int [][]vis,int row,int col,StringBuilder str,ArrayList<String> ans){
+        
+        if(row==n-1 && col==n-1){
+            ans.add(str.toString());
+            return;
+        }
+        int drow[]={-1,0,1,0};
+        int dcol[]={0,1,0,-1};
+        for(int k=0;k<4;k++){
+            int nrow=row+drow[k];
+            int ncol=col+dcol[k];
+            
+            if(validIndex(nrow,ncol,n) && m[nrow][ncol]==1 && vis[nrow][ncol]!=1){
+                str.append(move(k));
+                vis[nrow][ncol]=1;
+                solve(n,m,vis,nrow,ncol,str,ans);
+                str.deleteCharAt(str.length()-1);
+                vis[nrow][ncol]=0;
+            }
+        }
+    }
+    public static ArrayList<String> findPath(int[][] m, int n) {
+        // Your code here
+        ArrayList<String> ans=new ArrayList<>();
+        if(m[0][0]==0)
+            return ans;
+        StringBuilder str=new StringBuilder("");
+        int vis[][]=new int[n][n];
+        vis[0][0]=1;
+        solve(n,m,vis,0,0,str,ans);
+        return ans;
+    }
+}
